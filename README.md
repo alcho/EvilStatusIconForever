@@ -8,8 +8,8 @@ How to Install
 
  1. Clone the code
 
-    cd /home/brianhsu/.local/share/gnome-shell/extensions/
-    git clone git://github.com/brianhsu/EvilStatusIconForerver.git "EvilStatusIconForerver@bone.twbbs.org.tw"
+        cd /home/brianhsu/.local/share/gnome-shell/extensions/
+        git clone git://github.com/brianhsu/EvilStatusIconForerver.git "EvilStatusIconForerver@bone.twbbs.org.tw"
 
  2. Enable it using gnome-tweak-tool
 
