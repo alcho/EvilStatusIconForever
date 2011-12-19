@@ -3,6 +3,16 @@ Evil Status Icon Forever
 
 This is a GNOME 3.2 shell extensions that let users have good old applet-like notification area on the top bar.
 
+How to Install
+--------------
+
+ 1. Clone the code
+
+    cd /home/brianhsu/.local/share/gnome-shell/extensions/
+    git clone git://github.com/brianhsu/EvilStatusIconForerver.git "EvilStatusIconForerver@bone.twbbs.org.tw"
+
+ 2. Enable it using gnome-tweak-tool
+
 How to Use
 -----------
 
