@@ -6,15 +6,13 @@ This is a GNOME 3.2 shell extensions that let users have good old applet-like no
 How to Use
 -----------
 
-After install and enable this extension, you should have a file under ``~/.local/share/gnome-shell/extensions/EvilStatusIconForever@bone.twbbs.org.tw/extension.js``.
+After install and enable this extension, you should have a file under `~/.local/share/gnome-shell/extensions/EvilStatusIconForever@bone.twbbs.org.tw/extension.js`.
 
 Open this file using your favorite text editor, you should have seen the following code section, just add the application into ``notification`` array to make its notification show on top bar.
 
-You may use ``removeStatusIcon`` array to control which built-in icon should be hidden.
+You may use `removeStatusIcon` array to control which built-in icon should be hidden.
 
 NOTE!! You have to restart GNOME to make it work after install and change settings!!
-
-.. code-block:: javascript
 
     /*****************************************************
      * Statuc Icon Settings
