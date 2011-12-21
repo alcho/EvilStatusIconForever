@@ -40,16 +40,3 @@ NOTE!! You have to restart GNOME to make it work after install and change settin
         'pidgin',
         'gcin',
     ]
-
-    // The following list will control which bulit-in status
-    // icon show be hidden.
-    
-    var removeStatusIcon = [
-        'a11y',         // Accessibility
-        // 'volume',
-        // 'battery',
-        // 'keyboard',
-        // 'bluetooth',
-        // 'network'
-    ]
-   
