@@ -13,6 +13,7 @@ var notification = [
     'deadbeef',
     'pidgin',
     'gcin',
+    'hime'
 ]
 
 // The following list will control which bulit-in status
@@ -37,7 +38,7 @@ const Panel = imports.ui.panel;
 const Main = imports.ui.main;
 
 
-function hideIcon(name)
+function hideStatusIcon(name)
 {
     for (var i = 0; i < Main.panel._rightBox.get_children().length; i++) {
         if (Main.panel._statusArea[name] == 
@@ -48,6 +49,19 @@ function hideIcon(name)
     }
 
     Main.panel._statusArea[name] = null;
+}
+
+function restoreStatusIcon(name)
+{
+    let indicator = new Panel.STANDARD_STATUS_AREA_SHELL_IMPLEMENTATION[name];
+    Main.panel.addToStatusArea(
+        name, indicator, Panel.STANDARD_STATUS_AREA_ORDER.indexOf(name)
+    );
+}
+
+function removeFromTopBar(wmClass)
+{
+    delete StatusIconDispatcher.STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass];
 }
 
 function addToTopBar(wmClass)
@@ -68,11 +82,22 @@ function enable() {
 
     for (var i = 0; i < removeStatusIcon.length; i++) {
         global.log('Remove ' + removeStatusIcon[i] + " from top bar");
-        hideIcon(removeStatusIcon[i]);
+        hideStatusIcon(removeStatusIcon[i]);
     }
 
 }
 
 function disable() {
+
+    for (var i = 0; i < notification.length; i++) {
+        global.log('Remove ' + notification[i] + " from top bar");
+        removeFromTopBar(notification[i]);
+    }
+
+    for (var i = 0; i < removeStatusIcon.length; i++) {
+        global.log('Restore ' + removeStatusIcon[i] + " to top bar");
+        restoreStatusIcon(removeStatusIcon[i]);
+    }
+
 }
 
