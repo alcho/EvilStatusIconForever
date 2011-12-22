@@ -6,12 +6,7 @@ This is a GNOME 3.2 shell extensions that let users have good old applet-like no
 How to Install
 --------------
 
- 1. Clone the code
-
-        cd /home/brianhsu/.local/share/gnome-shell/extensions/
-        git clone git://github.com/brianhsu/EvilStatusIconForever.git "EvilStatusIconForever@bone.twbbs.org.tw"
-
- 2. Enable it using gnome-tweak-tool
+ 1. Enable it at https://extensions.gnome.org/extension/99/evial-status-icon-forerver/
 
 How to Use
 -----------
@@ -22,7 +17,9 @@ Open this file using your favorite text editor, you should have seen the followi
 
 You may use `removeStatusIcon` array to control which built-in icon should be hidden.
 
-NOTE!! You have to restart GNOME to make it work after install and change settings!!
+**!! NOTE !!**
+
+You have to restart GNOME (Alt-F2 and enter r) to make it work after install and change settings!!
 
     /*****************************************************
      * Statuc Icon Settings
@@ -36,7 +33,22 @@ NOTE!! You have to restart GNOME to make it work after install and change settin
     //
     
     var notification = [
-        'deadbeef',
-        'pidgin',
-        'gcin',
+        'deadbeef',     // Deadbeef Music Player
+        'pidgin',       // Pidgin IM Client
+        'gcin',         // GCIN Chinese Input Method
+        'hime'          // HIME Imput Method Editor
+    ]
+    
+    
+    // Add which built-in status icon you want to remove in the
+    // following list.
+    //
+    
+    var removeStatusIcon = [
+        'a11y',         // Accessibility
+        // 'volume',
+        // 'battery',
+        // 'keyboard',
+        // 'bluetooth',
+        // 'network'
     ]
