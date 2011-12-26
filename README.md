@@ -52,3 +52,44 @@ You have to restart GNOME (Alt-F2 and enter r) to make it work after install and
         // 'bluetooth',
         // 'network'
     ]
+
+
+How to Find Application Name
+=============================
+
+  0. This may borken your GNOME, BE CAREFUL AND BACKUP FIRST!!!!
+  1. You need root premission to do this.
+  2. Edit `/usr/share/gnome-shell/js/ui/statusIconDispatcher.js`
+  3. Move to line 48, you should see a function called `_onTrayIconAdded` which look like the following:
+
+        _onTrayIconAdded: function(o, icon) {
+            let wmClass = (icon.wm_class || 'unknown').toLowerCase();
+            let role = STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass];
+            if (role)
+                this.emit('status-icon-added', icon, role);
+            else
+                this.emit('message-icon-added', icon);
+        },  
+
+  4. Add `global.log("wmClass[] = " + wmClass);` after the line of `let role = ...`, now this function should look like the following:
+
+        _onTrayIconAdded: function(o, icon) {
+            let wmClass = (icon.wm_class || 'unknown').toLowerCase();
+            let role = STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass];
+            if (role)
+                this.emit('status-icon-added', icon, role);
+            else
+                this.emit('message-icon-added', icon);
+        },  
+
+  5. Restart GNOME 3 by press `Alt + F2` and `r` and hit enter.
+  6. Start GNOME console by press `Alt + F2` and `lg` and hit enter.
+  7. Switch to `Errors` tab, now you should see message like the following:
+
+        wmClass[] = deadbeef
+        wmClass[] = pidgin
+
+  8. The above is all tray icon you have now, pick up those tray icon you want it appears on top bar, and put thier name into `notification` array.
+  9. Restart GNOME, now you should see them on top bar. Goold Luck! :)
+
+        
