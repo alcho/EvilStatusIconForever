@@ -76,6 +76,7 @@ How to Find Application Name
         _onTrayIconAdded: function(o, icon) {
             let wmClass = (icon.wm_class || 'unknown').toLowerCase();
             let role = STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass];
+            global.log("wmClass[] = " + wmClass);
             if (role)
                 this.emit('status-icon-added', icon, role);
             else

@@ -13,7 +13,13 @@ var notification = [
     'deadbeef',     // Deadbeef Music Player
     'pidgin',       // Pidgin IM Client
     'gcin',         // GCIN Chinese Input Method
-    'hime'          // HIME Imput Method Editor
+    'hime',         // HIME Imput Method Editor
+    'dropbox',      // Drop Box
+    'thunderbird-bin',  // Thunderbird-bin (Gentoo binary package)
+    'thunderbird',      // Thunderbird
+    'firefox',          // Firefox with FireTray
+    'firefox-bin',      // Firefox-bin (Gentoo binary package)
+    'workrave'          // Workrave
 ]
 
 
