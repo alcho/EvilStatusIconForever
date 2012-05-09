@@ -19,7 +19,10 @@ var notification = [
     'thunderbird',      // Thunderbird
     'firefox',          // Firefox with FireTray
     'firefox-bin',      // Firefox-bin (Gentoo binary package)
-    'workrave'          // Workrave
+    'workrave',         // Workrave
+    'gajim',            // Gajim
+    'wicd-client.py',   // Wicd-gtk
+    'skype'             // Skype
 ]
 
 
