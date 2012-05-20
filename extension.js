@@ -17,6 +17,7 @@ var notification = [
     'dropbox',      // Drop Box
     'thunderbird-bin',  // Thunderbird-bin (Gentoo binary package)
     'thunderbird',      // Thunderbird
+    'transmission',   //Transmission
     'firefox',          // Firefox with FireTray
     'firefox-bin',      // Firefox-bin (Gentoo binary package)
     'workrave',         // Workrave
