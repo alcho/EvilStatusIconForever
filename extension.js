@@ -1,5 +1,5 @@
 /*****************************************************
- * Statuc Icon Settings
+ * Status Icon Settings
  ****************************************************/
 
 //
@@ -52,6 +52,10 @@ const Main = imports.ui.main;
 const STANDARD_TRAY_ICON_IMPLEMENTATIONS = imports.ui.notificationDaemon.STANDARD_TRAY_ICON_IMPLEMENTATIONS;
 let trayManager, addedID;
 let statusArea;
+
+function LOG(message) {
+    //log(message);
+}
 
 /**
  *  Hide built-in status icon.
@@ -118,12 +122,12 @@ function enable() {
     addedID = trayManager.connect('tray-icon-added', _onTrayIconAdded);
 
     for (var i = 0; i < notification.length; i++) {
-        global.log('Add ' + notification[i] + " to top bar");
+        LOG('Add ' + notification[i] + " to top bar");
         addToTopBar(notification[i]);
     }
 
     for (var i = 0; i < removeStatusIcon.length; i++) {
-        global.log('Remove ' + removeStatusIcon[i] + " from top bar");
+        LOG('Remove ' + removeStatusIcon[i] + " from top bar");
         hideStatusIcon(removeStatusIcon[i]);
     }
 
@@ -134,12 +138,12 @@ function disable() {
     addedID = 0;
 
     for (var i = 0; i < notification.length; i++) {
-        global.log('Remove ' + notification[i] + " from top bar");
+        LOG('Remove ' + notification[i] + " from top bar");
         removeFromTopBar(notification[i]);
     }
 
     for (var i = 0; i < removeStatusIcon.length; i++) {
-        global.log('Restore ' + removeStatusIcon[i] + " to top bar");
+        LOG('Restore ' + removeStatusIcon[i] + " to top bar");
         showStatusIcon(removeStatusIcon[i]);
     }
 
