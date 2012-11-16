@@ -24,7 +24,7 @@ var notification = [
     'gajim',            // Gajim
     'wicd-client.py',   // Wicd-gtk
     'skype'             // Skype
-]
+];
 
 
 // Add which built-in status icon you want to remove in the
@@ -38,20 +38,22 @@ var removeStatusIcon = [
     // 'keyboard',
     // 'bluetooth',
     // 'network'
-]
+];
 
 /******************************************************
  * Don't touch anything below!
  *****************************************************/
 
+const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 
 const PanelMenu = imports.ui.panelMenu;
 const Panel = imports.ui.panel;
 const Main = imports.ui.main;
 const STANDARD_TRAY_ICON_IMPLEMENTATIONS = imports.ui.notificationDaemon.STANDARD_TRAY_ICON_IMPLEMENTATIONS;
-let trayManager, addedID;
+let trayManager, addedID, fullScreenChangedId;
 let statusArea;
+let trayIcons = {};
 
 function LOG(message) {
     //log(message);
@@ -91,11 +93,13 @@ function _onTrayIconAdded(o, icon) {
     }
 
     icon.height = Panel.PANEL_ICON_SIZE;
+    icon.width = Panel.PANEL_ICON_SIZE;
     let buttonBox = new PanelMenu.Button();
     let box = buttonBox.actor;
     box.add_actor(icon);
 
     Main.panel._addToPanelBox(wmClass, buttonBox, 0, Main.panel._rightBox);
+    trayIcons[wmClass] = icon;
 }
 
 // STANDARD_TRAY_ICON_IMPLEMENTATIONS is necessary for 3.6
@@ -103,6 +107,9 @@ function _onTrayIconAdded(o, icon) {
 function removeFromTopBar(wmClass)
 {
     delete STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass];
+    if (trayIcons[wmClass]) {
+        trayIcons[wmClass].unparent();
+    }
     if (statusArea[wmClass]) {
         statusArea[wmClass].destroy();
     }
@@ -113,6 +120,47 @@ function addToTopBar(wmClass)
     STANDARD_TRAY_ICON_IMPLEMENTATIONS[wmClass] = wmClass;
 }
 
+function _moveTrayIconsToTopBar() {
+    let i;
+    for (i = 0; i < notification.length; i++) {
+        LOG('Add ' + notification[i] + " to top bar");
+        addToTopBar(notification[i]);
+    }
+
+    // convert existing ones to tray icons.
+    for (i = 0; i < Main.notificationDaemon._sources.length; ++i) {
+        let source = Main.notificationDaemon._sources[i],
+            icon = source.trayIcon;
+        if (icon) {
+            let wmClass = icon.wm_class ? icon.wm_class.toLowerCase() : '';
+            if (notification.indexOf(wmClass) > -1) {
+                // NOTE: if I use icon.unparent() it segfaults, but if I use
+                // parent.remove_actor(icon) it's fine.
+                // Weird!
+                icon.get_parent().remove_actor(icon);
+                source.destroy();
+
+                // add back to the tray
+                _onTrayIconAdded(trayManager, icon);
+            }
+        }
+    }
+}
+
+function _moveTrayIconsToMessageTray() {
+    for (var i = 0; i < notification.length; i++) {
+        removeFromTopBar(notification[i]);
+        let icon = trayIcons[notification[i]];
+        if (icon) {
+            LOG('Remove ' + notification[i] + " from top bar");
+            // add back to message tray
+            Main.notificationDaemon._onTrayIconAdded(Main.notificationDaemon, icon);
+            delete trayIcons[notification[i]];
+        }
+    }
+    trayIcons = {};
+}
+
 function init() {
 }
 
@@ -121,30 +169,36 @@ function enable() {
     trayManager = Main.notificationDaemon._trayManager;
     addedID = trayManager.connect('tray-icon-added', _onTrayIconAdded);
 
-    for (var i = 0; i < notification.length; i++) {
-        LOG('Add ' + notification[i] + " to top bar");
-        addToTopBar(notification[i]);
-    }
-
-    for (var i = 0; i < removeStatusIcon.length; i++) {
+    _moveTrayIconsToTopBar();
+    for (let i = 0; i < removeStatusIcon.length; i++) {
         LOG('Remove ' + removeStatusIcon[i] + " from top bar");
         hideStatusIcon(removeStatusIcon[i]);
     }
 
+    // NOTE: this fix (for icons turning into white squares) from TopIcon:
+    // https://extensions.gnome.org/extension/495/topicons/
+
+    // TrayIcons do not survive leaving the stage (they end up as
+    // whitesquares), so work around this by temporarily move them back to the
+    // message tray while we are in fullscreen.
+    fullScreenChangedId = Main.layoutManager.connect(
+        'primary-fullscreen-changed', function (o, state) {
+            if (state) {
+                _moveTrayIconsToMessageTray();
+            } else {
+                _moveTrayIconsToTopBar();
+            }
+        });
 }
 
 function disable() {
     trayManager.disconnect(addedID);
     addedID = 0;
 
-    for (var i = 0; i < notification.length; i++) {
-        LOG('Remove ' + notification[i] + " from top bar");
-        removeFromTopBar(notification[i]);
-    }
-
+    _moveTrayIconsToMessageTray();
     for (var i = 0; i < removeStatusIcon.length; i++) {
         LOG('Restore ' + removeStatusIcon[i] + " to top bar");
         showStatusIcon(removeStatusIcon[i]);
     }
-
+    Main.layoutManager.disconnect(fullScreenChangedId);
 }
